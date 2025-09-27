@@ -18,8 +18,8 @@ export class ChatProvider implements vscode.WebviewViewProvider {
   ) {
     this.ai = new AIService(context)
     this.apiService = new APIService({
-      baseUrl: 'http://localhost:8000/api/v1', // Default backend URL
-      timeout: 30000
+      baseUrl: "http://localhost:8000/api/v1", // Default backend URL
+      timeout: 30000,
     })
   }
 
@@ -80,6 +80,10 @@ export class ChatProvider implements vscode.WebviewViewProvider {
           vscode.window.showInformationMessage("File attachment feature")
           break
         }
+        case "openWebsite": {
+          await vscode.commands.executeCommand("ticket-to-code.openWebsite")
+          break
+        }
       }
     })
   }
@@ -111,13 +115,6 @@ export class ChatProvider implements vscode.WebviewViewProvider {
 }
 * { box-sizing: border-box; }
 body { margin:0; font-family: var(--vscode-font-family); color: var(--fg); background: var(--bg); display:flex; flex-direction:column; height:100%; }
-.banner { padding:12px; border-bottom:1px solid var(--border); background: rgba(127,127,127,0.06); }
-.banner h2 { margin:0 0 6px 0; font-size:16px; }
-.banner p { margin:0 0 8px 0; font-size:12px; color: var(--muted); }
-.banner .actions { display:flex; gap:8px; margin-top:12px; }
-.banner .actions button { background: var(--btn); color: var(--btn-fg); border:none; padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; }
-.banner .actions button.secondary { background: transparent; border:1px solid var(--border); color: var(--fg); }
-.banner .actions button:hover { opacity:0.9; }
 .messages { flex:1; overflow:auto; padding:12px; display:flex; flex-direction:column; gap:8px; }
 .msg { max-width:80%; padding:8px 10px; border:1px solid var(--border); border-radius:8px; white-space:pre-wrap; }
 .msg.user { align-self:flex-end; background: transparent; }
@@ -174,10 +171,6 @@ textarea:focus { border-color: var(--accent); }
 </style>
 </head>
 <body>
-  <div class="banner">
-    <h2>🎫 AI Assistant</h2>
-    <p>Ask questions and get AI-powered code context and solutions.</p>
-  </div>
   
   
   
@@ -410,6 +403,11 @@ attachFileBtn.onclick = () => {
 
 input.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)){ e.preventDefault(); send(); }
+});
+
+// Remove references to non-existent DOM elements that were causing JavaScript errors
+// These elements were removed when we cleaned up the UI but the JavaScript references remained
+window.addEventListener('message', (e)=>{
   if(e.key === '@') {
     // Handle @ context selection
     e.preventDefault();
@@ -467,11 +465,28 @@ window.addEventListener('message', (e) => {
       // Step 1: Find relevant context using enhanced local analysis
       const context = await this.findRelevantContext(query)
 
+      // If no context found, provide a helpful response
+      if (context.length === 0) {
+        this._view.webview.postMessage({
+          type: "aiResponse",
+          content: `I couldn't find any relevant code files for your query: "${query}"\n\nThis could be because:\n• No files match your search terms\n• The workspace hasn't been indexed yet\n• You're searching for terms that don't exist in the codebase\n\nTry using different keywords or check if your workspace contains the files you're looking for.`,
+          context: [],
+          analysis: "No relevant files found",
+          confidence: 0,
+          suggestions: [
+            "Try different search terms",
+            "Check if workspace is properly indexed",
+            "Verify file types are supported",
+          ],
+        })
+        return
+      }
+
       // Step 2: Enhanced analysis via API service (hybrid approach)
       const enhancedAnalysis = await this.apiService.analyzeContext({
         query,
         localContext: context,
-        workspaceFiles: context.map(f => f.path)
+        workspaceFiles: context.map((f) => f.path),
       })
 
       // Step 3: Generate AI solution
@@ -482,11 +497,17 @@ window.addEventListener('message', (e) => {
         },
         async () => {
           // Use enhanced context for better AI processing
-          const aiResponse = await this.ai.processWithContext(query, enhancedAnalysis.relevantFiles)
-          
+          const aiResponse = await this.ai.processWithContext(
+            query,
+            enhancedAnalysis.relevantFiles
+          )
+
           // Generate additional solution via API service
-          const apiSolution = await this.apiService.generateSolution(enhancedAnalysis.relevantFiles, query)
-          
+          const apiSolution = await this.apiService.generateSolution(
+            enhancedAnalysis.relevantFiles,
+            query
+          )
+
           return `${aiResponse}\n\n--- Enhanced Analysis ---\n${apiSolution}`
         }
       )
@@ -497,7 +518,7 @@ window.addEventListener('message', (e) => {
         context: enhancedAnalysis.relevantFiles,
         analysis: enhancedAnalysis.analysis,
         confidence: enhancedAnalysis.confidence,
-        suggestions: enhancedAnalysis.suggestions
+        suggestions: enhancedAnalysis.suggestions,
       })
     } catch (error) {
       this._view.webview.postMessage({
@@ -521,12 +542,22 @@ window.addEventListener('message', (e) => {
       // Local file analysis
       const context = await this.findLocalContext(query)
 
-      this._view.webview.postMessage({
-        type: "contextFinding",
-        status: "completed",
-        message: `Context analysis complete - ${context.length} relevant files found`,
-        context: context,
-      })
+      if (context.length === 0) {
+        this._view.webview.postMessage({
+          type: "contextFinding",
+          status: "completed",
+          message:
+            "No relevant files found for your query. Try using different keywords or check if the workspace is properly indexed.",
+          context: context,
+        })
+      } else {
+        this._view.webview.postMessage({
+          type: "contextFinding",
+          status: "completed",
+          message: `Context analysis complete - ${context.length} relevant files found`,
+          context: context,
+        })
+      }
 
       return context
     } catch (error) {
@@ -540,24 +571,51 @@ window.addEventListener('message', (e) => {
   }
 
   private async findLocalContext(query: string) {
-    // Use the enhanced CodeIndexer with multi-layered analysis
-    const contextResults = await this.codeIndexer.findRelevantContext(query)
-    
-    // Convert to the format expected by the rest of the system
-    const relevantFiles = contextResults.map(result => ({
-      uri: result.uri,
-      path: result.path,
-      content: result.content,
-      relevance: result.relevance,
-      type: result.type,
-      functions: result.functions,
-      classes: result.classes,
-      matches: result.matches
-    }))
+    try {
+      console.log(`Starting context search for query: "${query}"`)
 
-    return relevantFiles
+      // Ensure workspace is indexed first
+      await this.codeIndexer.indexWorkspace()
+      console.log("Workspace indexing completed")
+
+      // Use the enhanced CodeIndexer with multi-layered analysis
+      const contextResults = await this.codeIndexer.findRelevantContext(query)
+
+      console.log(
+        `Found ${contextResults.length} relevant files for query: "${query}"`
+      )
+      console.log(
+        "Context results:",
+        contextResults.map((r) => ({ path: r.path, relevance: r.relevance }))
+      )
+
+      // Convert to the format expected by the rest of the system
+      const relevantFiles = contextResults.map((result) => ({
+        uri: result.uri,
+        path: result.path,
+        content: result.content,
+        relevance: result.relevance,
+        type: result.type,
+        functions: result.functions,
+        classes: result.classes,
+        matches: result.matches,
+      }))
+
+      return relevantFiles
+    } catch (error) {
+      console.error("Error in findLocalContext:", error)
+      // Send error message to frontend
+      if (this._view) {
+        this._view.webview.postMessage({
+          type: "error",
+          content: `Context finding failed: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        })
+      }
+      return []
+    }
   }
-
 
   private async applyGeneratedCode(code: { path: string; content: string }) {
     const uri = vscode.Uri.joinPath(

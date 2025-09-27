@@ -21,10 +21,10 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onView:ticketList",
     "onView:aiChat",
     "onCommand:ticket-to-code.connectJira",
-    "onCommand:ticket-to-code.startSession"
+    "onCommand:ticket-to-code.startSession",
+    "onCommand:ticket-to-code.openWebsite"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -43,11 +43,6 @@
           "id": "jiraConnection",
           "name": "Connection",
           "type": "webview"
-        },
-        {
-          "id": "ticketList",
-          "name": "JIRA Tickets",
-          "type": "tree"
         },
         {
           "id": "aiChat",

@@ -26,7 +26,17 @@ export class JiraProvider {
         prompt: 'Enter JIRA base URL', 
         placeHolder: 'https://company.atlassian.net' 
       }) || '';
-      await cfg.update('jira.url', url, vscode.ConfigurationTarget.Workspace);
+      
+      // Use Global config if no workspace is open
+      const configTarget = vscode.workspace.workspaceFolders 
+        ? vscode.ConfigurationTarget.Workspace 
+        : vscode.ConfigurationTarget.Global;
+      
+      try {
+        await cfg.update('jira.url', url, configTarget);
+      } catch (error) {
+        console.warn('Failed to save JIRA URL to configuration:', error);
+      }
     }
 
     const email = (await this.context.secrets.get('ticket-to-code.jiraEmail')) ||

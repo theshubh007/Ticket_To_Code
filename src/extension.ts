@@ -1,5 +1,4 @@
 import * as vscode from "vscode"
-import { TicketTreeDataProvider } from "./providers/TreeDataProvider"
 import { ChatProvider } from "./providers/ChatProvider"
 import { JiraProvider } from "./providers/JiraProvider"
 import { JiraConnectionProvider } from "./providers/JiraConnectionProvider"
@@ -24,17 +23,19 @@ export async function activate(context: vscode.ExtensionContext) {
     isConn
   )
 
-  const ticketsTree = new TicketTreeDataProvider(jira)
   const codeIndexer = new CodeIndexer(context)
   const jiraConnectionProvider = new JiraConnectionProvider(context, jira)
   const chatProvider = new ChatProvider(context, jira, codeIndexer)
   const generatedDocProvider = new GeneratedContentProvider()
 
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider("jiraConnection", jiraConnectionProvider, {
-      webviewOptions: { retainContextWhenHidden: true },
-    }),
-    vscode.window.registerTreeDataProvider("ticketList", ticketsTree),
+    vscode.window.registerWebviewViewProvider(
+      "jiraConnection",
+      jiraConnectionProvider,
+      {
+        webviewOptions: { retainContextWhenHidden: true },
+      }
+    ),
     vscode.window.registerWebviewViewProvider("aiChat", chatProvider, {
       webviewOptions: { retainContextWhenHidden: true },
     }),
@@ -61,7 +62,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
   registerCommands(context, {
     jira,
-    ticketsTree,
     chatProvider,
     generatedDocProvider,
     codeIndexer,

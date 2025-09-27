@@ -1,0 +1,27 @@
+[
+  {
+    "github": "theshubh007",
+    "role": "Code Indexing Engineer",
+    "blurb": "Leads code indexing and search—designs fast, incremental indexing and improves relevance so the AI gets the right context."
+  },
+  {
+    "github": "premshah06",
+    "role": "Frontend & Integration Engineer",
+    "blurb": "Owns the web UI and integration layer—polished, accessible frontend plus clean bridges to extension APIs and services."
+  },
+  {
+    "github": "YugmPatel",
+    "role": "Backend Engineer — JIRA Integrations",
+    "blurb": "Builds robust JIRA workflows—auth, pagination, and webhooks for reliable ticket data and seamless syncing."
+  },
+  {
+    "github": "kushal511",
+    "role": "Backend Engineer — JIRA Integrations",
+    "blurb": "Focuses on backend services powering JIRA connectivity, scalability, and resilience across environments."
+  },
+  {
+    "github": "pruthvik-sheth",
+    "role": "Code Indexing Engineer",
+    "blurb": "Develops the indexing and analysis pipeline—tokenization, performance tuning, and intelligent retrieval."
+  }
+]
