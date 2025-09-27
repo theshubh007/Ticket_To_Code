@@ -1,0 +1,524 @@
+{
+  "total": 1727,
+  "maxResults": 25,
+  "issues": [
+    {
+      "key": "OPENNLP-1770",
+      "fields": {
+        "summary": "Update the OpenNLP logo",
+        "description": "The OpenNLP logo contains the feather logo that the ASF has moved away from. We need to update the OpenNLP logo.\r\n\r\nFor history, the previous logo was done under https://issues.apache.org/jira/browse/OPENNLP-6.",
+        "status": {
+          "name": "Open"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Major"
+        },
+        "components": [],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1769",
+      "fields": {
+        "summary": "Update maven-failsafe-plugin to 3.5.4",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Dependency upgrade"
+        },
+        "priority": {
+          "name": "Trivial"
+        },
+        "components": [
+          {
+            "name": "Build, Packaging and Test"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1768",
+      "fields": {
+        "summary": "Update gRPC to 1.75.0",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Dependency upgrade"
+        },
+        "priority": {
+          "name": "Trivial"
+        },
+        "components": [
+          {
+            "name": "gRPC binding"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1767",
+      "fields": {
+        "summary": "Fix sentence detection when an abbreviation overlaps at sentence end",
+        "description": "Atm, sentence detection works incorrectly in case an abbreviation dictionary is loaded which contains common abbreviations, that is, if an abbreviation such as \"S.\" (page in German) overlaps at the sentence end, the actual sentence end is not respected and the subsequent sentence is glued to the previous one. Consequently, the actual sentence boundary is not respected and causes a mismatch.\r\n\r\nExamples for the German language:\r\n- \"Die Frage wurde gestellt. Sie wurde beantwortet.\"\r\n- \"Es lag am DBMS. Die Performance muss verbessert werden.\"\r\n\r\nA reproducer can easily be constructed via a JUnit test for {{SentenceDetectorMEGermanTest}}.\r\n\r\nNote:\r\nAffects all other languages as well. Therefore, the implications have more impact and thus have a higher priority than usual.",
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Bug"
+        },
+        "priority": {
+          "name": "Major"
+        },
+        "components": [
+          {
+            "name": "Sentence Detector"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1766",
+      "fields": {
+        "summary": "Update logcaptor to 2.12.1",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Dependency upgrade"
+        },
+        "priority": {
+          "name": "Trivial"
+        },
+        "components": [
+          {
+            "name": "Build, Packaging and Test"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1765",
+      "fields": {
+        "summary": "Improve Release Documentation: Rebase Instead of Squash, Clarify Voting Email Format, and Suggest GitHub Release Creation",
+        "description": "The current release documentation could be improved to prevent common mistakes and streamline the release process. The following updates should be made:\r\n # *Avoid Squashing Release Commits*\r\n\r\n ** Add a clear instruction to *not squash* release commits when merging GitHub pull requests related to releases.\r\n\r\n ** Instead, contributors should use *rebase* to preserve the individual commits, which are important for tracking changes and debugging.\r\n\r\n\r\n\r\n # *Clarify Voting Email Requirements*\r\n\r\n ** Emphasize that after a successful vote, a *new email* must be sent to the mailing list.\r\n\r\n ** This email should clearly include a [{{{}RESULT]{}}} header to indicate the outcome of the vote.\r\n\r\n ** This helps with visibility and proper record-keeping within the community / list server and is common ASF practice.\r\n\r\n\r\n\r\n # *Suggest Creating a GitHub Release*\r\n\r\n ** Add a hint or recommendation to create a *GitHub Release* after a successful merge.\r\n\r\n ** This allows tools like *Dependabot* and *Renovate* to detect new versions and release notes, improving downstream dependency updates.\r\n\r\n ",
+        "status": {
+          "name": "Closed"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [
+          {
+            "name": "Documentation"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1764",
+      "fields": {
+        "summary": "Update classgraph to 4.8.181",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Dependency upgrade"
+        },
+        "priority": {
+          "name": "Trivial"
+        },
+        "components": [
+          {
+            "name": "Models"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1763",
+      "fields": {
+        "summary": "Add Unit-Tests for Custom feature generation in Name Finder Tool",
+        "description": "It will be useful to add a unit-test for custom feature generation in NER. \r\n\r\nFollowing section describes it -[https://opennlp.apache.org/docs/2.5.4/manual/opennlp.html#tools.namefind.training.featuregen]\r\n\r\nTo demonstrate, we can add brown-clusters as additional features and observe the impact on the output of Named Finder Tool.\r\n\r\n \r\n\r\n \r\n\r\n ",
+        "status": {
+          "name": "Open"
+        },
+        "issuetype": {
+          "name": "Test"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [
+          {
+            "name": "Name Finder"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1762",
+      "fields": {
+        "summary": "Fix mvn clean install by setting default download property to SourceForge for surefire/failsafe",
+        "description": "Currently, running {{mvn clean install}} fails unless a specific system property is manually passed to configure the download URL for test dependencies. This affects users running builds outside the {{-Pci}} profile.\r\n\r\nIn the {{-Pci}} profile, the property is correctly set to point to the Apache nightlies ({{{}nightlies.apache.org{}}}). However, for standard builds, there is no default value, which causes tests to fail due to missing artifacts.",
+        "status": {
+          "name": "Closed"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Major"
+        },
+        "components": [
+          {
+            "name": "Build, Packaging and Test"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1761",
+      "fields": {
+        "summary": "Remove Bing/Azure related code from opennlp-similarity",
+        "description": "While investigating recent status for OPENNLP-1455, it seems Microsoft will fully discontinue access to Bing search API in August 2025. \r\n\r\nTherefore, existing code in the opennlp-similarity component can be removed cleaned. Moreover, it is not working \"as is\", as the required dependency is broken for ages, it seems. ",
+        "status": {
+          "name": "Open"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Major"
+        },
+        "components": [
+          {
+            "name": "Similarity"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1760",
+      "fields": {
+        "summary": "Make SourceForge URLs in Tests Configurable to Avoid 403/Rate Limiting Issues",
+        "description": "We're currently seeing intermittent test failures due to 403 Forbidden or rate-limiting issues when fetching resources from SourceForge. These failures make the test suite unreliable and non-repeatable, especially in CI environments or during frequent local runs\r\n\r\nIt is ok from an ASF perspective to host these models on nightlies.a.o (similar to our test data), so best would be to configure our CI build to run against that.",
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Major"
+        },
+        "components": [],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1759",
+      "fields": {
+        "summary": "Optimize computation of hashCode in StringList",
+        "description": "Right now, StringList#hashCode() computes the hash code in a CPU-intensive way each time it is called. When used in NgramModel and Dictionary, this causes many extra CPU cycles. Those can be easily avoided, by simply pre-computing the hashCode for each StringList object once, that is on first access - if required.\r\n\r\nLet's tune this towards being more eco-friendly.",
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Improvement"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1758",
+      "fields": {
+        "summary": "Enhance Javadoc of UIMA extension",
+        "description": "As the title says, existing JavaDoc of the corresponding package can be improved.\r\n\r\nLet's do it.",
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Improvement"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [
+          {
+            "name": "UIMA Integration"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1757",
+      "fields": {
+        "summary": "Expose probs() method in thread-safe probabilistic ME classes",
+        "description": "Atm, the thread-safe wrapper classes hide the capability to retrieve probabilities related to the last processed sequence in \r\n * {{LemmatizerME}}\r\n * {{NameFinderME}}\r\n * {{POSTaggerME}}\r\n * {{ChunkerME}}\r\n * {{TokenizerME}}\r\n * SentenceDetectorME\r\n\r\nFor some applications, it might be necessary or a benefit to have access to those probabilities scores to either report them or make a decision based on a certainty level.\r\n\r\nIn this context, the {{double[] probs()}} method can be described in a new {{Probabilistic}} interface  \r\n\r\nLet's provide it!",
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Improvement"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [
+          {
+            "name": "Machine Learning"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1756",
+      "fields": {
+        "summary": "Update classgraph to 4.8.180",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Dependency upgrade"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1755",
+      "fields": {
+        "summary": "Align Module Names with OpenNLP Models Name",
+        "description": "Use :: Notation for better reactor readability",
+        "status": {
+          "name": "Closed"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Major"
+        },
+        "components": [],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1754",
+      "fields": {
+        "summary": "Convert GH Action Tags into Pinned SHA",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Major"
+        },
+        "components": [],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1753",
+      "fields": {
+        "summary": "Switch to pre-trained Model binaries v1.3",
+        "description": "OpenNLP runtime and several (integration) tests require an update towards the latest version strings of the latest models' release 1.3.",
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1752",
+      "fields": {
+        "summary": "Update license-maven-plugin to 2.6.0",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Trivial"
+        },
+        "components": [
+          {
+            "name": "Build, Packaging and Test"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1751",
+      "fields": {
+        "summary": "Update log4j2 to 2.25.1",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Dependency upgrade"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1750",
+      "fields": {
+        "summary": "Add OpenNLP Models 1.3 as Maven artifacts",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [
+          {
+            "name": "Models"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1749",
+      "fields": {
+        "summary": "Release pre-trained OpenNLP models 1.3.0 artifacts",
+        "description": null,
+        "status": {
+          "name": "Closed"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Minor"
+        },
+        "components": [
+          {
+            "name": "Models"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1748",
+      "fields": {
+        "summary": "Update Website with new models (1.3)",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Trivial"
+        },
+        "components": [
+          {
+            "name": "Models"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1747",
+      "fields": {
+        "summary": "Update build-helper-maven-plugin to 3.6.1",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Trivial"
+        },
+        "components": [
+          {
+            "name": "Build, Packaging and Test"
+          }
+        ],
+        "labels": []
+      }
+    },
+    {
+      "key": "OPENNLP-1746",
+      "fields": {
+        "summary": "Move to Apache Parent 35",
+        "description": null,
+        "status": {
+          "name": "Resolved"
+        },
+        "issuetype": {
+          "name": "Task"
+        },
+        "priority": {
+          "name": "Trivial"
+        },
+        "components": [
+          {
+            "name": "Build, Packaging and Test"
+          }
+        ],
+        "labels": []
+      }
+    }
+  ]
+}
