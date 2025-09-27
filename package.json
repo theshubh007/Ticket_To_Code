@@ -4,9 +4,21 @@
   "description": "Streamline your workflow from JIRA tickets to code implementation with AI assistance, safe diffs, and Git integration.",
   "publisher": "your-publisher",
   "version": "0.0.1",
-  "engines": { "vscode": "^1.90.0" },
-  "categories": ["Other", "Programming Languages"],
-  "keywords": ["jira", "ai", "tickets", "workflow", "git", "productivity"],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "jira",
+    "ai",
+    "tickets",
+    "workflow",
+    "git",
+    "productivity"
+  ],
   "activationEvents": [
     "onStartupFinished",
     "onView:ticketList",
@@ -17,44 +29,93 @@
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
-      "activitybar": [{
-        "id": "ticket-to-code",
-        "title": "Ticket to Code",
-        "icon": "resources/icon.svg"
-      }]
+      "activitybar": [
+        {
+          "id": "ticket-to-code",
+          "title": "Ticket to Code",
+          "icon": "resources/icon.svg"
+        }
+      ]
     },
     "views": {
       "ticket-to-code": [
-        { "id": "ticketList", "name": "JIRA Tickets", "type": "tree" },
-        { "id": "aiChat", "name": "AI Assistant", "type": "webview" }
+        {
+          "id": "jiraConnection",
+          "name": "Connection",
+          "type": "webview"
+        },
+        {
+          "id": "ticketList",
+          "name": "JIRA Tickets",
+          "type": "tree"
+        },
+        {
+          "id": "aiChat",
+          "name": "AI Assistant",
+          "type": "webview"
+        }
       ]
     },
-    "viewsWelcome": [
+    "commands": [
       {
-        "view": "ticketList",
-        "contents": "# 🎫 Welcome to Ticket to Code\n\n**Streamline your workflow from JIRA tickets to code implementation.**\n\nGet from **ticket → code** without leaving VS Code:\n\n✅ **Browse JIRA tickets** in the sidebar  \n🤖 **Chat with AI assistant** for guidance & code generation  \n🔍 **Safely preview changes** with side-by-side diffs  \n🌿 **Auto-create Git branches** per ticket  \n📎 **Link code to tickets** with CodeLens  \n\n[🔗 Sign in to JIRA](command:ticket-to-code.connectJira)\n",
-        "when": "!ticketToCode.connected"
+        "command": "ticket-to-code.connectJira",
+        "title": "Ticket to Code: Connect to JIRA"
+      },
+      {
+        "command": "ticket-to-code.startSession",
+        "title": "Ticket to Code: Start AI Session"
+      },
+      {
+        "command": "ticket-to-code.showTickets",
+        "title": "Ticket to Code: Show Tickets"
+      },
+      {
+        "command": "ticket-to-code.showTicket",
+        "title": "Ticket to Code: Show Ticket"
+      },
+      {
+        "command": "ticket-to-code.loadTickets",
+        "title": "Ticket to Code: Load Tickets"
       }
     ],
-    "commands": [
-      { "command": "ticket-to-code.connectJira", "title": "Ticket to Code: Connect to JIRA" },
-      { "command": "ticket-to-code.startSession", "title": "Ticket to Code: Start AI Session" },
-      { "command": "ticket-to-code.showTickets", "title": "Ticket to Code: Show Tickets" },
-      { "command": "ticket-to-code.showTicket", "title": "Ticket to Code: Show Ticket" }
-    ],
     "keybindings": [
-      { "command": "ticket-to-code.showTickets", "key": "ctrl+shift+t" }
+      {
+        "command": "ticket-to-code.showTickets",
+        "key": "ctrl+shift+t"
+      }
     ],
     "configuration": {
       "type": "object",
       "title": "Ticket to Code",
       "properties": {
-        "ticket-to-code.jira.url": { "type": "string", "default": "", "description": "JIRA base URL (e.g., https://company.atlassian.net)" },
-        "ticket-to-code.ai.model": { "type": "string", "default": "gpt-4", "description": "AI model identifier" },
-        "ticket-to-code.autoIndex": { "type": "boolean", "default": true, "description": "Automatically index code on workspace open" },
-        "ticket-to-code.autoGenerateTests": { "type": "boolean", "default": true, "description": "Generate tests for changes" },
-        "ticket-to-code.gitIntegration.autoCreateBranch": { "type": "boolean", "default": true },
-        "ticket-to-code.gitIntegration.branchNamingPattern": { "type": "string", "default": "feature/{ticket-id}-{description}" }
+        "ticket-to-code.jira.url": {
+          "type": "string",
+          "default": "",
+          "description": "JIRA base URL (e.g., https://company.atlassian.net)"
+        },
+        "ticket-to-code.ai.model": {
+          "type": "string",
+          "default": "gpt-4",
+          "description": "AI model identifier"
+        },
+        "ticket-to-code.autoIndex": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically index code on workspace open"
+        },
+        "ticket-to-code.autoGenerateTests": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generate tests for changes"
+        },
+        "ticket-to-code.gitIntegration.autoCreateBranch": {
+          "type": "boolean",
+          "default": true
+        },
+        "ticket-to-code.gitIntegration.branchNamingPattern": {
+          "type": "string",
+          "default": "feature/{ticket-id}-{description}"
+        }
       }
     }
   },
