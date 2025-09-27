@@ -1,0 +1,42 @@
+{
+  "id": "10002",
+  "key": "PROJ-124",
+  "self": "https://your-domain.atlassian.net/rest/api/3/issue/10002",
+  "fields": {
+    "summary": "Fix API response caching bug",
+    "description": "The API is not properly caching responses, causing performance issues.",
+    "status": {
+      "id": "1",
+      "name": "To Do",
+      "statusCategory": {
+        "id": 2,
+        "key": "new",
+        "colorName": "blue-gray"
+      }
+    },
+    "assignee": null,
+    "reporter": {
+      "accountId": "5b10a2844c20165700ede21h",
+      "displayName": "Jane Manager",
+      "emailAddress": "jane@example.com"
+    },
+    "priority": {
+      "id": "3",
+      "name": "Medium",
+      "iconUrl": "https://your-domain.atlassian.net/images/icons/priorities/medium.svg"
+    },
+    "issuetype": {
+      "id": "10004",
+      "name": "Bug",
+      "iconUrl": "https://your-domain.atlassian.net/images/icons/issuetypes/bug.svg"
+    },
+    "project": {
+      "id": "10000",
+      "key": "PROJ",
+      "name": "Sample Project"
+    },
+    "created": "2024-01-16T09:15:00.000+0000",
+    "updated": "2024-01-16T09:15:00.000+0000",
+    "labels": ["performance", "api", "caching"]
+  }
+}
