@@ -75,4 +75,13 @@ export class JiraProvider {
     const all = await this.listTickets();
     return all.find(t => t.key === key);
   }
+
+  async disconnect(): Promise<void> {
+    // Clear stored credentials
+    await this.context.secrets.delete('ticket-to-code.jiraEmail');
+    await this.context.secrets.delete('ticket-to-code.jiraToken');
+    
+    // Set context to disconnected
+    await vscode.commands.executeCommand('setContext', 'ticketToCode.connected', false);
+  }
 }

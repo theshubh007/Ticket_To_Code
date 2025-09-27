@@ -31,12 +31,16 @@ export default function Home() {
           
           <div className="mt-12 flex justify-center">
             <div className="bg-white rounded-lg shadow-lg p-2 max-w-2xl">
-              <img 
-                src="https://via.placeholder.com/800x400/1e90ff/ffffff?text=VS+Code+Extension+Demo" 
-                alt="Ticket to Code VS Code extension interface showing JIRA tickets, AI chat, and code diff"
-                className="rounded-md w-full h-auto"
-                loading="eager"
-              />
+              <div className="bg-gray-900 rounded-md p-8 text-center">
+                <div className="text-6xl mb-4">🎫</div>
+                <h3 className="text-xl font-semibold text-white mb-2">VS Code Extension</h3>
+                <p className="text-gray-300 mb-4">Seamlessly integrated into your development environment</p>
+                <div className="flex justify-center space-x-4 text-sm text-gray-400">
+                  <span>• JIRA Integration</span>
+                  <span>• AI Assistant</span>
+                  <span>• Code Diffs</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -96,17 +100,18 @@ export default function Home() {
           </p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
-          {/* Placeholder logos - replace with actual partner/user logos */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
           {[
-            'VS Code',
-            'GitHub',
-            'JIRA',
-            'OpenAI'
-          ].map((name, index) => (
-            <div key={index} className="text-center">
-              <div className="bg-gray-100 rounded-lg p-6 h-20 flex items-center justify-center">
-                <span className="font-semibold text-gray-500">{name}</span>
+            { name: 'VS Code', icon: '💻', description: 'Integrated' },
+            { name: 'GitHub', icon: '🐙', description: 'Connected' },
+            { name: 'JIRA', icon: '🎫', description: 'Synced' },
+            { name: 'AI', icon: '🤖', description: 'Powered' }
+          ].map((item, index) => (
+            <div key={index} className="text-center group">
+              <div className="bg-white rounded-lg p-6 h-20 flex flex-col items-center justify-center shadow-sm border border-gray-200 group-hover:shadow-md transition-shadow">
+                <div className="text-2xl mb-1">{item.icon}</div>
+                <div className="font-semibold text-gray-700 text-sm">{item.name}</div>
+                <div className="text-xs text-gray-500">{item.description}</div>
               </div>
             </div>
           ))}

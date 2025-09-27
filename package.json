@@ -2,8 +2,8 @@
   "name": "ticket-to-code",
   "displayName": "Ticket to Code",
   "description": "Streamline your workflow from JIRA tickets to code implementation with AI assistance, safe diffs, and Git integration.",
-  "publisher": "your-publisher",
-  "version": "0.0.1",
+  "publisher": "ticket-to-code",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -71,6 +71,14 @@
       {
         "command": "ticket-to-code.loadTickets",
         "title": "Ticket to Code: Load Tickets"
+      },
+      {
+        "command": "ticket-to-code.disconnectJira",
+        "title": "Ticket to Code: Disconnect from JIRA"
+      },
+      {
+        "command": "ticket-to-code.importSettings",
+        "title": "Ticket to Code: Import Settings"
       }
     ],
     "keybindings": [

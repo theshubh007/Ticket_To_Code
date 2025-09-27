@@ -86,6 +86,78 @@ export function registerCommands(context: vscode.ExtensionContext, deps: Ctx) {
       const websiteUrl = "https://ticket-to-code.dev" // Replace with your actual website URL
       await vscode.env.openExternal(vscode.Uri.parse(websiteUrl))
       vscode.window.showInformationMessage("Opening Ticket to Code website...")
+    }),
+
+    vscode.commands.registerCommand("ticket-to-code.disconnectJira", async () => {
+      try {
+        await deps.jira.disconnect()
+        deps.statusBarItem.text = "$(plug) Ticket to Code: Disconnected"
+        await vscode.commands.executeCommand(
+          "setContext",
+          "ticketToCode.connected",
+          false
+        )
+        vscode.window.showInformationMessage("Disconnected from JIRA successfully.")
+      } catch (error) {
+        console.error("Failed to disconnect from JIRA:", error)
+        vscode.window.showErrorMessage("Failed to disconnect from JIRA.")
+      }
+    }),
+
+    vscode.commands.registerCommand("ticket-to-code.importSettings", async () => {
+      try {
+        // Show file picker for settings file
+        const fileUri = await vscode.window.showOpenDialog({
+          canSelectFiles: true,
+          canSelectFolders: false,
+          canSelectMany: false,
+          filters: {
+            'JSON Files': ['json'],
+            'All Files': ['*']
+          },
+          title: 'Select Settings File to Import'
+        })
+
+        if (fileUri && fileUri[0]) {
+          const settingsContent = await vscode.workspace.fs.readFile(fileUri[0])
+          const settings = JSON.parse(settingsContent.toString())
+          
+          // Import JIRA settings
+          if (settings.jira) {
+            const config = vscode.workspace.getConfiguration('ticket-to-code')
+            if (settings.jira.url) {
+              await config.update('jira.url', settings.jira.url, vscode.ConfigurationTarget.Global)
+            }
+          }
+          
+          // Import AI settings
+          if (settings.ai && settings.ai.apiKey) {
+            await context.secrets.store('ticket-to-code.aiKey', settings.ai.apiKey)
+          }
+          
+          vscode.window.showInformationMessage('Settings imported successfully!')
+        }
+      } catch (error) {
+        console.error("Failed to import settings:", error)
+        vscode.window.showErrorMessage("Failed to import settings. Please check the file format.")
+      }
+    }),
+
+    vscode.commands.registerCommand("ticket-to-code.loadTickets", async () => {
+      try {
+        const isConnected = await deps.jira.isConnected()
+        if (!isConnected) {
+          vscode.window.showWarningMessage("Please connect to JIRA first.")
+          return
+        }
+        
+        // Refresh the JIRA connection view
+        await vscode.commands.executeCommand("ticket-to-code.refreshViews")
+        vscode.window.showInformationMessage("Loading tickets...")
+      } catch (error) {
+        console.error("Failed to load tickets:", error)
+        vscode.window.showErrorMessage("Failed to load tickets.")
+      }
     })
   )
 }
