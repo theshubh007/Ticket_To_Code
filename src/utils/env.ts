@@ -37,28 +37,39 @@ export async function migrateEnvToSecrets(context: vscode.ExtensionContext) {
 
 export async function seedConfigFromEnv() {
   const cfg = vscode.workspace.getConfiguration('ticket-to-code');
+  
+  // Determine the appropriate configuration target
+  // Use Global if no workspace is open, otherwise use Workspace
+  const configTarget = vscode.workspace.workspaceFolders 
+    ? vscode.ConfigurationTarget.Workspace 
+    : vscode.ConfigurationTarget.Global;
 
-  if (!cfg.get<string>('jira.url') && process.env['JIRA_URL']) {
-    await cfg.update('jira.url', process.env['JIRA_URL'], vscode.ConfigurationTarget.Workspace);
-  }
+  try {
+    if (!cfg.get<string>('jira.url') && process.env['JIRA_URL']) {
+      await cfg.update('jira.url', process.env['JIRA_URL'], configTarget);
+    }
 
-  if (!cfg.get<string>('ai.model') && process.env['AI_MODEL']) {
-    await cfg.update('ai.model', process.env['AI_MODEL'], vscode.ConfigurationTarget.Workspace);
-  }
+    if (!cfg.get<string>('ai.model') && process.env['AI_MODEL']) {
+      await cfg.update('ai.model', process.env['AI_MODEL'], configTarget);
+    }
 
-  if (cfg.get<boolean>('autoIndex') === undefined && process.env['AUTO_INDEX']) {
-    await cfg.update('autoIndex', process.env['AUTO_INDEX'] === 'true', vscode.ConfigurationTarget.Workspace);
-  }
+    if (cfg.get<boolean>('autoIndex') === undefined && process.env['AUTO_INDEX']) {
+      await cfg.update('autoIndex', process.env['AUTO_INDEX'] === 'true', configTarget);
+    }
 
-  if (cfg.get<boolean>('autoGenerateTests') === undefined && process.env['AUTO_GENERATE_TESTS']) {
-    await cfg.update('autoGenerateTests', process.env['AUTO_GENERATE_TESTS'] === 'true', vscode.ConfigurationTarget.Workspace);
-  }
+    if (cfg.get<boolean>('autoGenerateTests') === undefined && process.env['AUTO_GENERATE_TESTS']) {
+      await cfg.update('autoGenerateTests', process.env['AUTO_GENERATE_TESTS'] === 'true', configTarget);
+    }
 
-  if (cfg.get<boolean>('gitIntegration.autoCreateBranch') === undefined && process.env['GIT_AUTO_CREATE_BRANCH']) {
-    await cfg.update('gitIntegration.autoCreateBranch', process.env['GIT_AUTO_CREATE_BRANCH'] === 'true', vscode.ConfigurationTarget.Workspace);
-  }
+    if (cfg.get<boolean>('gitIntegration.autoCreateBranch') === undefined && process.env['GIT_AUTO_CREATE_BRANCH']) {
+      await cfg.update('gitIntegration.autoCreateBranch', process.env['GIT_AUTO_CREATE_BRANCH'] === 'true', configTarget);
+    }
 
-  if (!cfg.get<string>('gitIntegration.branchNamingPattern') && process.env['GIT_BRANCH_PATTERN']) {
-    await cfg.update('gitIntegration.branchNamingPattern', process.env['GIT_BRANCH_PATTERN'], vscode.ConfigurationTarget.Workspace);
+    if (!cfg.get<string>('gitIntegration.branchNamingPattern') && process.env['GIT_BRANCH_PATTERN']) {
+      await cfg.update('gitIntegration.branchNamingPattern', process.env['GIT_BRANCH_PATTERN'], configTarget);
+    }
+  } catch (error) {
+    // If configuration update fails, log the error but don't prevent extension activation
+    console.warn('Failed to seed configuration from environment variables:', error);
   }
 }

@@ -12,7 +12,8 @@
     "onView:ticketList",
     "onView:aiChat",
     "onCommand:ticket-to-code.connectJira",
-    "onCommand:ticket-to-code.startSession"
+    "onCommand:ticket-to-code.startSession",
+    "onCommand:ticket-to-code.openWebsite"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -40,7 +41,8 @@
       { "command": "ticket-to-code.connectJira", "title": "Ticket to Code: Connect to JIRA" },
       { "command": "ticket-to-code.startSession", "title": "Ticket to Code: Start AI Session" },
       { "command": "ticket-to-code.showTickets", "title": "Ticket to Code: Show Tickets" },
-      { "command": "ticket-to-code.showTicket", "title": "Ticket to Code: Show Ticket" }
+      { "command": "ticket-to-code.showTicket", "title": "Ticket to Code: Show Ticket" },
+      { "command": "ticket-to-code.openWebsite", "title": "Ticket to Code: Open Website" }
     ],
     "keybindings": [
       { "command": "ticket-to-code.showTickets", "key": "ctrl+shift+t" }

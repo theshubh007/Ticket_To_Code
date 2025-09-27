@@ -17,7 +17,8 @@ Get from **ticket → code** without leaving VS Code:
 2. **Open the Ticket to Code view** in the Activity Bar (🎫 icon)
 3. **Click "Sign in to JIRA"** in the Welcome panel
 4. **Start chatting** with the AI Assistant (Ctrl/Cmd+Enter to send)
-5. **Apply sample code** to see the safe diff workflow
+5. **Visit the website** by clicking "🌐 Visit Website" or running "Ticket to Code: Open Website"
+6. **Apply sample code** to see the safe diff workflow
 
 ## 🛠️ Development Setup for Teammates
 
@@ -98,6 +99,7 @@ npm run build
 - **Extension not loading**: Check the Debug Console for TypeScript/webpack errors
 - **JIRA connection issues**: Verify credentials in `.env` file
 - **AI not responding**: Check AI_API_KEY is set correctly
+- **"No workspace opened" error**: The extension works without a workspace, but some features (like workspace indexing) require an open folder. Open a folder in VS Code for full functionality.
 
 ### Testing Features
 - **JIRA Integration**: Use the "Sign in to JIRA" button (uses stubbed data by default)
