@@ -42,6 +42,7 @@
 
 ```
 npm install
+npm run build
 npm run watch
 # Press F5 in VS Code
 ```
