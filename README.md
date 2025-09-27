@@ -1,111 +1,205 @@
-# 🎫 Ticket to Code — VS Code Extension
+# Ticket to Code
 
-**Streamline your workflow from JIRA tickets to code implementation with AI assistance.**
+Turn Jira tickets into working code with an AI agent and live code indexing.
 
-Get from **ticket → code** without leaving VS Code:
+## Features
 
-✅ **JIRA Integration** - Browse and manage tickets in sidebar  
-🤖 **AI Assistant** - Chat interface for code guidance and generation  
-📎 **CodeLens Linking** - Connect code functions to specific tickets  
-🔍 **Safe Diff Previews** - Review AI-generated changes before applying  
-🌿 **Git Integration** - Auto-create branches per ticket  
-🔐 **Secure Configuration** - `.env` → dotenv → SecretStorage migration  
+### 🎫 Jira Integration
+- **OAuth 2.0 & PAT Support**: Secure authentication with Jira Cloud
+- **Ticket Management**: View assigned tickets with filtering and search
+- **Real-time Sync**: Automatic ticket updates and status tracking
+- **Rich Ticket Details**: Full ticket information with attachments and comments
 
-## 🚀 Quick Start for Users
+### 🤖 AI-Powered Code Generation
+- **Multiple AI Providers**: OpenAI, Azure OpenAI, OpenRouter, and custom endpoints
+- **Streaming Responses**: Real-time AI responses with stop/start controls
+- **Context-Aware**: AI understands your codebase through live indexing
+- **Interactive Tools**: Built-in commands for code search, file operations, and git integration
 
-1. **Install the extension** in VS Code
-2. **Open the Ticket to Code view** in the Activity Bar (🎫 icon)
-3. **Click "Sign in to JIRA"** in the Welcome panel
-4. **Start chatting** with the AI Assistant (Ctrl/Cmd+Enter to send)
-5. **Visit the website** by clicking "🌐 Visit Website" or running "Ticket to Code: Open Website"
-6. **Apply sample code** to see the safe diff workflow
+### 📁 Live Code Indexing
+- **Smart Indexing**: Automatically indexes your workspace respecting `.gitignore`
+- **Multi-language Support**: TypeScript, JavaScript, Python, Java, C#, and more
+- **Symbol Extraction**: Functions, classes, interfaces, and variables
+- **Progress Tracking**: Real-time indexing progress with pause/resume
 
-## 🛠️ Development Setup for Teammates
+### 💬 Interactive Chat Interface
+- **Ticket-Focused**: Chat context includes selected ticket details
+- **Tool Commands**: `/search`, `/open`, `/plan`, `/scaffold`, `/commit`, `/test`
+- **Code Actions**: Apply patches, create branches, show diffs
+- **Message History**: Persistent chat history per ticket
+
+### ⚙️ Comprehensive Settings
+- **Secure Storage**: API keys stored in VS Code's secret storage
+- **Flexible Configuration**: Customizable indexing patterns and AI settings
+- **Settings Import/Export**: Easy configuration sharing and backup
+- **Validation**: Built-in settings validation with helpful error messages
+
+## Quick Start
+
+### 1. Install the Extension
+```bash
+# Install from VS Code Marketplace
+# Or install from source
+npm install
+npm run build
+```
+
+### 2. Connect to Jira
+1. Open the **Ticket to Code** sidebar
+2. Click **"Sign in with Jira"**
+3. Enter your Jira base URL (e.g., `https://company.atlassian.net`)
+4. Complete OAuth authentication or use Personal Access Token
+
+### 3. Configure AI Provider
+1. Go to **Integrations** tab
+2. Select your AI provider (OpenAI, Azure, OpenRouter, or Custom)
+3. Enter your API key
+4. Test the connection
+
+### 4. Start Indexing
+1. Go to **Indexing** tab
+2. Click **"Start Indexing"** to index your workspace
+3. Wait for indexing to complete
+
+### 5. Select a Ticket
+1. Go to **Tickets** tab
+2. Click on any ticket to view details
+3. Click **"Start Work"** to begin AI chat
+
+## Usage
+
+### Basic Workflow
+
+1. **Select a Ticket**: Choose from your assigned tickets
+2. **Start AI Chat**: Click "Start Work" to open the AI chat
+3. **Describe Your Needs**: Tell the AI what you want to implement
+4. **Use Tools**: Leverage built-in commands for code operations
+5. **Apply Changes**: Use AI suggestions to modify your code
+
+### AI Chat Commands
+
+- `/search <query>` - Search the codebase
+- `/open <file:line>` - Open a file at specific line
+- `/plan` - Create an implementation plan
+- `/scaffold` - Generate file structure
+- `/commit` - Propose git changes
+- `/test` - Run tests
+- `/explain <code>` - Explain code functionality
+
+### Keyboard Shortcuts
+
+- `Ctrl+Shift+R` - Refresh tickets
+- `Ctrl+Shift+C` - Open AI chat
+- `Ctrl+Shift+I` - Start indexing
+
+## Configuration
+
+### Jira Settings
+```json
+{
+  "ticketToCode.jira.baseUrl": "https://company.atlassian.net",
+  "ticketToCode.jira.authMethod": "oauth",
+  "ticketToCode.jira.email": "your.email@company.com"
+}
+```
+
+### AI Settings
+```json
+{
+  "ticketToCode.ai.provider": "openai",
+  "ticketToCode.ai.routerUrl": "https://custom-router.com/api"
+}
+```
+
+### Indexing Settings
+```json
+{
+  "ticketToCode.index.paths": ["**/*"],
+  "ticketToCode.index.exclude": [
+    "**/node_modules/**",
+    "**/.git/**",
+    "**/dist/**",
+    "**/build/**"
+  ],
+  "ticketToCode.index.maxFileSizeKB": 512
+}
+```
+
+## Architecture
+
+### Core Components
+
+- **Authentication**: Jira OAuth 2.0 and PAT support
+- **Jira Client**: REST API integration with error handling
+- **AI Provider Router**: Multi-provider AI integration
+- **Code Indexer**: Workspace indexing with symbol extraction
+- **Webview Providers**: React-based UI components
+- **Tree Data Providers**: VS Code tree view integration
+
+### File Structure
+
+```
+src/
+├── auth/                 # Authentication providers
+├── jira/                 # Jira API client
+├── ai/                   # AI provider router
+├── views/                # Tree data providers
+│   └── webviews/         # Webview providers
+├── services/             # Core services
+└── extension.ts          # Main extension entry point
+```
+
+## Development
 
 ### Prerequisites
-- **Node.js** (v18 or higher)
-- **npm** (comes with Node.js)
-- **VS Code** (latest version)
+- Node.js 18+
+- TypeScript 5+
+- VS Code Extension API
 
-### Clone and Setup
+### Building
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd ticket-to-code
-
-# Install dependencies
 npm install
-
-# Copy environment template and configure secrets
-cp .env .env.local
-# Edit .env.local with your actual API keys and JIRA credentials
+npm run build
 ```
 
-### Build Commands
+### Development Mode
 ```bash
-# Development build with file watching (recommended during development)
 npm run watch
-
-# Production build (single build)
-npm run build
-
-# Generate/update documentation
-npm run gen:doc
 ```
 
-### Running the Extension
+### Testing
 ```bash
-# Method 1: VS Code Debug (Recommended)
-# 1. Open the project in VS Code
-# 2. Press F5 to launch Extension Development Host
-# 3. The extension will be loaded in the new VS Code window
-
-# Method 2: Manual build then test
-npm run build
-# Then press F5 in VS Code
+npm test
 ```
 
-### Development Workflow
-1. **Make code changes** in `src/` directory
-2. **Run `npm run watch`** for automatic rebuilding
-3. **Press F5** to test in Extension Development Host
-4. **Reload the Extension Host** (Ctrl+R) to see changes
-5. **Check the Debug Console** for any errors
+## Contributing
 
-### Project Structure
-```
-├── src/                    # TypeScript source code
-│   ├── extension.ts        # Main extension entry point
-│   ├── providers/          # JIRA, Chat, Tree, CodeLens providers
-│   ├── services/           # AI, CodeIndexer, Git services
-│   ├── commands/           # VS Code command handlers
-│   ├── utils/              # Environment and utility functions
-│   └── virtualDocs/        # Generated content provider
-├── resources/              # Icons and assets
-├── docs/                   # Documentation
-├── .env                    # Environment variables (gitignored)
-├── package.json            # Extension manifest and dependencies
-├── tsconfig.json           # TypeScript configuration
-└── webpack.config.js       # Build configuration
-```
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-### Configuration
-- **Secrets**: Add real values to `.env` (AI_API_KEY, JIRA credentials)
-- **Settings**: Extension settings are in `package.json` → `contributes.configuration`
-- **Commands**: Available commands listed in `package.json` → `contributes.commands`
+## License
 
-### Troubleshooting
-- **Build errors**: Run `npm install` to ensure dependencies are installed
-- **Extension not loading**: Check the Debug Console for TypeScript/webpack errors
-- **JIRA connection issues**: Verify credentials in `.env` file
-- **AI not responding**: Check AI_API_KEY is set correctly
-- **"No workspace opened" error**: The extension works without a workspace, but some features (like workspace indexing) require an open folder. Open a folder in VS Code for full functionality.
+MIT License - see LICENSE file for details
 
-### Testing Features
-- **JIRA Integration**: Use the "Sign in to JIRA" button (uses stubbed data by default)
-- **AI Chat**: Send messages with Ctrl/Cmd+Enter
-- **CodeLens**: Add ticket IDs like `PROJ-1234` in file headers to see 📎 links
-- **Diff Preview**: Click "Apply Sample Code" to see virtual document diffs
-- **Git Integration**: Open tickets to auto-create branches (if Git is available)
+## Support
 
-See **docs/IDE-Design.md** for detailed architecture and feature documentation.
+- **Documentation**: [ticket-to-code.dev/docs](https://ticket-to-code.dev/docs)
+- **Issues**: [GitHub Issues](https://github.com/ticket-to-code/ticket-to-code/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ticket-to-code/ticket-to-code/discussions)
+
+## Changelog
+
+### v1.0.0
+- Initial release with Jira integration
+- AI-powered code generation
+- Live code indexing and search
+- Interactive chat interface
+- Multiple AI provider support
+- Comprehensive settings management
+
+---
+
+Made with ❤️ for developers

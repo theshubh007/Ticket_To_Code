@@ -1,7 +1,7 @@
 {
   "name": "ticket-to-code",
   "displayName": "Ticket to Code",
-  "description": "Streamline your workflow from JIRA tickets to code implementation with AI assistance, safe diffs, and Git integration.",
+  "description": "Transform your Jira tickets into production-ready code with AI assistance, intelligent code indexing, and seamless development workflow integration. Connect to Jira, configure AI providers, and get intelligent code suggestions for your tickets.",
   "publisher": "ticket-to-code",
   "version": "1.0.0",
   "engines": {
@@ -9,7 +9,8 @@
   },
   "categories": [
     "Other",
-    "Programming Languages"
+    "Programming Languages",
+    "Machine Learning"
   ],
   "keywords": [
     "jira",
@@ -17,107 +18,344 @@
     "tickets",
     "workflow",
     "git",
-    "productivity"
+    "productivity",
+    "code-generation",
+    "assistant"
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onView:aiChat",
-    "onCommand:ticket-to-code.connectJira",
-    "onCommand:ticket-to-code.startSession",
-    "onCommand:ticket-to-code.openWebsite"
+    "onView:ticketToCode.tickets",
+    "onView:ticketToCode.chat",
+    "onView:ticketToCode.indexing",
+    "onView:ticketToCode.integrations",
+    "onView:ticketToCode.about",
+    "onCommand:ticketToCode.openWelcome",
+    "onCommand:ticketToCode.signInJira",
+    "onCommand:ticketToCode.openSettings",
+    "onCommand:ticketToCode.refreshTickets",
+    "onCommand:ticketToCode.openChat",
+    "onCommand:ticketToCode.startIndexing",
+    "onCommand:ticketToCode.pauseIndexing",
+    "onCommand:ticketToCode.clearIndexCache",
+    "onCommand:ticketToCode.openIntegrations",
+    "onCommand:ticketToCode.openAbout",
+    "onCommand:ticketToCode.applyPatch",
+    "onCommand:ticketToCode.createBranch",
+    "onCommand:ticketToCode.showDiff"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "ticket-to-code",
+          "id": "ticketToCode",
           "title": "Ticket to Code",
           "icon": "resources/icon.svg"
         }
       ]
     },
     "views": {
-      "ticket-to-code": [
+      "ticketToCode": [
         {
-          "id": "jiraConnection",
-          "name": "Connection",
-          "type": "webview"
+          "id": "tickets",
+          "name": "Tickets",
+          "when": "ticketToCode.jiraAuthenticated"
         },
         {
-          "id": "aiChat",
-          "name": "AI Assistant",
-          "type": "webview"
+          "id": "chat",
+          "name": "AI Chat",
+          "when": "ticketToCode.ticketSelected"
+        },
+        {
+          "id": "indexing",
+          "name": "Indexing",
+          "when": "ticketToCode.workspaceOpen"
+        },
+        {
+          "id": "integrations",
+          "name": "Integrations"
+        },
+        {
+          "id": "about",
+          "name": "About"
         }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "ticketToCode.tickets",
+        "contents": "No tickets found. [Connect to Jira](command:ticketToCode.signInJira) to get started."
+      },
+      {
+        "view": "ticketToCode.chat",
+        "contents": "Select a ticket to start chatting with AI."
+      },
+      {
+        "view": "ticketToCode.indexing",
+        "contents": "No indexing in progress. [Start indexing](command:ticketToCode.startIndexing) to begin."
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "ticketToCode.welcome",
+        "title": "Welcome to Ticket to Code",
+        "description": "Get started with AI-powered ticket implementation",
+        "steps": [
+          {
+            "id": "connectJira",
+            "title": "Connect to Jira",
+            "description": "Connect to your Jira instance to fetch tickets",
+            "media": {
+              "image": "resources/walkthrough/jira-connect.png",
+              "altText": "Jira connection screen"
+            },
+            "completionEvents": [
+              "onCommand:ticketToCode.signInJira"
+            ]
+          },
+          {
+            "id": "addAiKey",
+            "title": "Add AI Provider Key",
+            "description": "Configure your AI provider API key",
+            "media": {
+              "image": "resources/walkthrough/ai-key.png",
+              "altText": "AI key configuration"
+            },
+            "completionEvents": [
+              "onCommand:ticketToCode.openIntegrations"
+            ]
+          },
+          {
+            "id": "indexProject",
+            "title": "Index Your Project",
+            "description": "Let the AI understand your codebase",
+            "media": {
+              "image": "resources/walkthrough/indexing.png",
+              "altText": "Project indexing"
+            },
+            "completionEvents": [
+              "onCommand:ticketToCode.startIndexing"
+            ]
+          },
+          {
+            "id": "pickTicket",
+            "title": "Pick a Ticket",
+            "description": "Select a ticket to start implementing",
+            "media": {
+              "image": "resources/walkthrough/ticket-selection.png",
+              "altText": "Ticket selection"
+            }
+          },
+          {
+            "id": "startChat",
+            "title": "Start AI Chat",
+            "description": "Chat with AI to implement your ticket",
+            "media": {
+              "image": "resources/walkthrough/ai-chat.png",
+              "altText": "AI chat interface"
+            }
+          }
+        ]
+      }
+    ],
     "commands": [
       {
-        "command": "ticket-to-code.connectJira",
-        "title": "Ticket to Code: Connect to JIRA"
+        "command": "ticketToCode.openWelcome",
+        "title": "Open Welcome",
+        "category": "Ticket to Code"
       },
       {
-        "command": "ticket-to-code.startSession",
-        "title": "Ticket to Code: Start AI Session"
+        "command": "ticketToCode.signInJira",
+        "title": "Sign in with Jira",
+        "category": "Ticket to Code"
       },
       {
-        "command": "ticket-to-code.showTickets",
-        "title": "Ticket to Code: Show Tickets"
+        "command": "ticketToCode.openSettings",
+        "title": "Open Settings",
+        "category": "Ticket to Code"
       },
       {
-        "command": "ticket-to-code.showTicket",
-        "title": "Ticket to Code: Show Ticket"
+        "command": "ticketToCode.refreshTickets",
+        "title": "Refresh Tickets",
+        "category": "Ticket to Code",
+        "when": "ticketToCode.jiraAuthenticated"
       },
       {
-        "command": "ticket-to-code.loadTickets",
-        "title": "Ticket to Code: Load Tickets"
+        "command": "ticketToCode.openChat",
+        "title": "Open AI Chat",
+        "category": "Ticket to Code",
+        "when": "ticketToCode.ticketSelected"
       },
       {
-        "command": "ticket-to-code.disconnectJira",
-        "title": "Ticket to Code: Disconnect from JIRA"
+        "command": "ticketToCode.startIndexing",
+        "title": "Start Indexing",
+        "category": "Ticket to Code",
+        "when": "ticketToCode.workspaceOpen"
       },
       {
-        "command": "ticket-to-code.importSettings",
-        "title": "Ticket to Code: Import Settings"
+        "command": "ticketToCode.pauseIndexing",
+        "title": "Pause Indexing",
+        "category": "Ticket to Code",
+        "when": "ticketToCode.indexingActive"
+      },
+      {
+        "command": "ticketToCode.clearIndexCache",
+        "title": "Clear Index Cache",
+        "category": "Ticket to Code"
+      },
+      {
+        "command": "ticketToCode.openIntegrations",
+        "title": "Open Integrations",
+        "category": "Ticket to Code"
+      },
+      {
+        "command": "ticketToCode.openAbout",
+        "title": "Open About",
+        "category": "Ticket to Code"
+      },
+      {
+        "command": "ticketToCode.applyPatch",
+        "title": "Apply Patch",
+        "category": "Ticket to Code",
+        "when": "ticketToCode.patchAvailable"
+      },
+      {
+        "command": "ticketToCode.createBranch",
+        "title": "Create Branch",
+        "category": "Ticket to Code",
+        "when": "ticketToCode.ticketSelected"
+      },
+      {
+        "command": "ticketToCode.showDiff",
+        "title": "Show Diff",
+        "category": "Ticket to Code",
+        "when": "ticketToCode.changesAvailable"
       }
     ],
     "keybindings": [
       {
-        "command": "ticket-to-code.showTickets",
-        "key": "ctrl+shift+t"
+        "command": "ticketToCode.refreshTickets",
+        "key": "ctrl+shift+r",
+        "when": "ticketToCode.jiraAuthenticated"
+      },
+      {
+        "command": "ticketToCode.openChat",
+        "key": "ctrl+shift+c",
+        "when": "ticketToCode.ticketSelected"
+      },
+      {
+        "command": "ticketToCode.startIndexing",
+        "key": "ctrl+shift+i",
+        "when": "ticketToCode.workspaceOpen"
       }
     ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "ticketToCode.openWelcome",
+          "when": "!ticketToCode.onboarded"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "ticketToCode.refreshTickets",
+          "when": "view == ticketToCode.tickets",
+          "group": "navigation"
+        },
+        {
+          "command": "ticketToCode.startIndexing",
+          "when": "view == ticketToCode.indexing",
+          "group": "navigation"
+        },
+        {
+          "command": "ticketToCode.pauseIndexing",
+          "when": "view == ticketToCode.indexing && ticketToCode.indexingActive",
+          "group": "navigation"
+        },
+        {
+          "command": "ticketToCode.clearIndexCache",
+          "when": "view == ticketToCode.indexing",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "ticketToCode.openChat",
+          "when": "view == ticketToCode.tickets && viewItem == ticket",
+          "group": "inline"
+        },
+        {
+          "command": "ticketToCode.createBranch",
+          "when": "view == ticketToCode.tickets && viewItem == ticket",
+          "group": "inline"
+        }
+      ]
+    },
     "configuration": {
       "type": "object",
       "title": "Ticket to Code",
       "properties": {
-        "ticket-to-code.jira.url": {
+        "ticketToCode.jira.baseUrl": {
           "type": "string",
           "default": "",
-          "description": "JIRA base URL (e.g., https://company.atlassian.net)"
+          "description": "Jira base URL (e.g., https://company.atlassian.net)",
+          "markdownDescription": "The base URL of your Jira instance. This is required to connect to Jira."
         },
-        "ticket-to-code.ai.model": {
+        "ticketToCode.jira.authMethod": {
           "type": "string",
-          "default": "gpt-4",
-          "description": "AI model identifier"
+          "enum": ["oauth", "pat"],
+          "default": "oauth",
+          "description": "Authentication method for Jira",
+          "markdownDescription": "Choose between OAuth 2.0 (recommended) or Personal Access Token (PAT) for Jira authentication."
         },
-        "ticket-to-code.autoIndex": {
-          "type": "boolean",
-          "default": true,
-          "description": "Automatically index code on workspace open"
-        },
-        "ticket-to-code.autoGenerateTests": {
-          "type": "boolean",
-          "default": true,
-          "description": "Generate tests for changes"
-        },
-        "ticket-to-code.gitIntegration.autoCreateBranch": {
-          "type": "boolean",
-          "default": true
-        },
-        "ticket-to-code.gitIntegration.branchNamingPattern": {
+        "ticketToCode.jira.email": {
           "type": "string",
-          "default": "feature/{ticket-id}-{description}"
+          "default": "",
+          "description": "Jira email (for PAT authentication)",
+          "markdownDescription": "Your Jira email address. Only required when using PAT authentication."
+        },
+        "ticketToCode.ai.provider": {
+          "type": "string",
+          "enum": ["openai", "azure", "openrouter", "custom"],
+          "default": "openai",
+          "description": "AI provider",
+          "markdownDescription": "Select your preferred AI provider for code generation and assistance."
+        },
+        "ticketToCode.ai.routerUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Custom AI router URL",
+          "markdownDescription": "Custom router URL for AI requests. Leave empty to use the default provider endpoints."
+        },
+        "ticketToCode.index.paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["**/*"],
+          "description": "File paths to index",
+          "markdownDescription": "Glob patterns for files to include in indexing. Default: `[\"**/*\"]`"
+        },
+        "ticketToCode.index.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["**/node_modules/**", "**/.git/**", "**/dist/**", "**/build/**", "**/*.log"],
+          "description": "File paths to exclude from indexing",
+          "markdownDescription": "Glob patterns for files to exclude from indexing."
+        },
+        "ticketToCode.index.maxFileSizeKB": {
+          "type": "number",
+          "default": 512,
+          "description": "Maximum file size to index (KB)",
+          "markdownDescription": "Files larger than this size will be skipped during indexing."
+        },
+        "ticketToCode.experiment.telemetry": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable telemetry",
+          "markdownDescription": "Help improve Ticket to Code by sending anonymous usage data."
         }
       }
     }
@@ -136,6 +374,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "axios": "^1.6.0",
+    "ws": "^8.14.0"
   }
 }
