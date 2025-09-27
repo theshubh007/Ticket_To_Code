@@ -19,10 +19,15 @@ export function registerCommands(context: vscode.ExtensionContext, deps: Ctx) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand('ticket-to-code.connectJira', async () => {
-      const ok = await deps.jira.connect();
-      deps.statusBarItem.text = ok ? '$(plug) Ticket to Code: Connected' : '$(plug) Ticket to Code: Disconnected';
-      await vscode.commands.executeCommand('setContext', 'ticketToCode.connected', ok);
-      deps.ticketsTree.refresh();
+      try {
+        const ok = await deps.jira.connect();
+        deps.statusBarItem.text = ok ? '$(plug) Ticket to Code: Connected' : '$(plug) Ticket to Code: Disconnected';
+        await vscode.commands.executeCommand('setContext', 'ticketToCode.connected', ok);
+        deps.ticketsTree.refresh();
+      } catch (error) {
+        console.error('Failed to connect to JIRA:', error);
+        vscode.window.showErrorMessage('Failed to connect to JIRA. Please check your credentials and try again.');
+      }
     }),
 
     vscode.commands.registerCommand('ticket-to-code.startSession', async () => {
@@ -57,6 +62,12 @@ export function registerCommands(context: vscode.ExtensionContext, deps: Ctx) {
           await vscode.commands.executeCommand('git.branch', { name }); 
         } catch { /* noop if Git not available */ }
       }
+    }),
+
+    vscode.commands.registerCommand('ticket-to-code.openWebsite', async () => {
+      const websiteUrl = 'https://ticket-to-code.dev'; // Replace with your actual website URL
+      await vscode.env.openExternal(vscode.Uri.parse(websiteUrl));
+      vscode.window.showInformationMessage('Opening Ticket to Code website...');
     })
   );
 }

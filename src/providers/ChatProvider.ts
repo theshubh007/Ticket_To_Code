@@ -42,6 +42,10 @@ export class ChatProvider implements vscode.WebviewViewProvider {
           await vscode.commands.executeCommand('ticket-to-code.connectJira');
           break;
         }
+        case 'openWebsite': {
+          await vscode.commands.executeCommand('ticket-to-code.openWebsite');
+          break;
+        }
       }
     });
   }
@@ -93,6 +97,7 @@ button:disabled { opacity:0.7; cursor:default; }
     <p>Sign in to JIRA to load your tickets, then chat with the AI assistant for code guidance and safely apply suggested changes with side-by-side diffs.</p>
     <div class="actions">
       <button id="connect">🔗 Sign in to JIRA</button>
+      <button id="website">🌐 Visit Website</button>
     </div>
   </div>
   <div class="header">
@@ -141,6 +146,9 @@ document.getElementById('setKey').onclick=()=>{
 };
 document.getElementById('connect').onclick=()=>{
   vscode.postMessage({command:'connectJira'});
+};
+document.getElementById('website').onclick=()=>{
+  vscode.postMessage({command:'openWebsite'});
 };
 window.addEventListener('message', (e)=>{
   const m = e.data;

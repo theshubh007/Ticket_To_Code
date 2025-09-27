@@ -7,12 +7,22 @@ export class CodeIndexer {
 
   async indexWorkspace(): Promise<void> {
     const folders = vscode.workspace.workspaceFolders ?? [];
+    
+    if (folders.length === 0) {
+      console.log('No workspace folders available for indexing');
+      return;
+    }
+    
     for (const folder of folders) {
-      const uris = await vscode.workspace.findFiles(
-        new vscode.RelativePattern(folder, '**/*.{ts,tsx,js,jsx,py,java,go}'),
-        '**/{node_modules,.git,dist,build}/**'
-      );
-      await Promise.all(uris.map(u => this.indexFile(u)));
+      try {
+        const uris = await vscode.workspace.findFiles(
+          new vscode.RelativePattern(folder, '**/*.{ts,tsx,js,jsx,py,java,go}'),
+          '**/{node_modules,.git,dist,build}/**'
+        );
+        await Promise.all(uris.map(u => this.indexFile(u)));
+      } catch (error) {
+        console.error(`Failed to index folder ${folder.uri.fsPath}:`, error);
+      }
     }
   }
 
